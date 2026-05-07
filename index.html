@@ -1,0 +1,525 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Barlow+Condensed:wght@400;600;700;900&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .ig {
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+    background: #000;
+    color: #f0eee8;
+    width: 100%;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 683 / 456;
+    min-height: 280px;
+    max-height: 520px;
+    overflow: hidden;
+    background: #000;
+  }
+  .hero img.hero-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center top;
+    display: block;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+      rgba(0,0,0,0.15) 0%,
+      rgba(0,0,0,0.1) 40%,
+      rgba(0,0,0,0.75) 80%,
+      #000 100%
+    );
+  }
+  .hero-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 0 24px 18px;
+    text-align: center;
+  }
+  .hero-name-kr {
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: rgba(201,168,76,0.8);
+    font-weight: 300;
+    margin-bottom: 4px;
+  }
+  .hero-sub {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: rgba(240,238,232,0.35);
+    font-weight: 300;
+  }
+  .hero-desc {
+    font-size: 11px;
+    color: rgba(240,238,232,0.55);
+    margin-top: 8px;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* ── STATS ── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5px;
+    background: rgba(201,168,76,0.12);
+    border-top: 0.5px solid rgba(201,168,76,0.15);
+    border-bottom: 0.5px solid rgba(201,168,76,0.15);
+  }
+  .stat-item {
+    padding: 14px 6px;
+    text-align: center;
+    background: #000;
+  }
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #C9A84C;
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+  .stat-label {
+    font-size: 9px;
+    color: rgba(240,238,232,0.35);
+    margin-top: 3px;
+    letter-spacing: 0.3px;
+    font-weight: 300;
+  }
+
+  /* ── SECTION TITLE ── */
+  .sec-title {
+    text-align: center;
+    padding: 22px 0 12px;
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: rgba(201,168,76,0.6);
+    font-weight: 400;
+  }
+
+  /* ── ALBUM SHOWCASE ── */
+  .album-showcase { padding: 0 18px 22px; }
+  .album-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .album-card { text-align: center; cursor: pointer; transition: transform 0.2s; }
+  .album-card:hover { transform: translateY(-3px); }
+  .album-art {
+    width: 100%; aspect-ratio: 1;
+    border-radius: 5px; overflow: hidden;
+    margin-bottom: 5px;
+    border: 0.5px solid rgba(255,255,255,0.06);
+  }
+  .album-art img { width: 100%; height: 100%; object-fit: contain; display: block; background: #fff; }
+  .album-art-ph {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700;
+    text-align: center; line-height: 1.3; padding: 4px;
+  }
+  .album-year {
+    font-size: 12px; color: #C9A84C; font-weight: 600;
+    font-family: 'Barlow Condensed', sans-serif; letter-spacing: 1px;
+  }
+  .album-name { font-size: 10px; color: rgba(240,238,232,0.4); font-weight: 300; margin-top: 1px; }
+
+  /* ── TIMELINE ── */
+  .timeline { padding: 0 14px 40px; position: relative; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 50%; top: 0; bottom: 0;
+    width: 0.5px;
+    background: linear-gradient(180deg, transparent, rgba(201,168,76,0.3) 4%, rgba(201,168,76,0.3) 96%, transparent);
+    transform: translateX(-50%);
+  }
+
+  .tl-item {
+    display: flex; align-items: flex-start;
+    position: relative; cursor: pointer;
+  }
+  .tl-item:nth-child(odd) { flex-direction: row-reverse; }
+
+  .tl-dot {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #C9A84C; border: 1.5px solid #000;
+    z-index: 2; top: 18px;
+  }
+  .tl-item.milestone .tl-dot { width: 11px; height: 11px; background: #e94560; box-shadow: 0 0 8px rgba(233,69,96,0.5); top: 16px; }
+  .tl-item.dormant .tl-dot { background: #333; }
+  .tl-item.back .tl-dot { width: 11px; height: 11px; background: #a78bfa; box-shadow: 0 0 8px rgba(167,139,250,0.5); top: 16px; }
+
+  .tl-card {
+    width: calc(50% - 22px);
+    background: rgba(255,255,255,0.02);
+    border: 0.5px solid rgba(255,255,255,0.06);
+    border-radius: 7px; padding: 12px 13px;
+    margin: 6px 11px; transition: all 0.25s;
+  }
+  .tl-item:hover .tl-card {
+    background: rgba(201,168,76,0.04);
+    border-color: rgba(201,168,76,0.2);
+  }
+
+  .yr {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 700;
+    color: #C9A84C; line-height: 1; letter-spacing: 1px;
+  }
+  .tl-item.milestone .yr { color: #f87171; }
+  .tl-item.dormant .yr { color: #555; }
+  .tl-item.back .yr { color: #c084fc; }
+
+  .tl-status {
+    font-size: 9px; letter-spacing: 1.5px;
+    margin: 3px 0 8px; font-weight: 500;
+  }
+  .s-debut { color: #60a5fa; }
+  .s-turn  { color: #facc15; }
+  .s-rise  { color: #4ade80; }
+  .s-peak  { color: #f87171; }
+  .s-off   { color: #555; }
+  .s-back  { color: #a78bfa; }
+
+  .albums-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .a-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid rgba(255,255,255,0.08);
+    border-radius: 4px; padding: 2px 6px;
+    font-size: 9px; color: rgba(240,238,232,0.6); font-weight: 300;
+  }
+  .a-mini {
+    width: 18px; height: 18px; border-radius: 2px;
+    overflow: hidden; flex-shrink: 0;
+    border: 0.5px solid rgba(255,255,255,0.08);
+  }
+  .a-mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .a-mini-ph {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 6px; font-weight: 700; text-align: center; line-height: 1.1; padding: 1px;
+  }
+
+  .tl-desc { font-size: 11px; color: rgba(240,238,232,0.55); line-height: 1.65; margin-bottom: 7px; font-weight: 300; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 3px; }
+  .tag {
+    font-size: 9px; padding: 2px 6px; border-radius: 8px;
+    margin-bottom: 2px; font-weight: 400; letter-spacing: 0.2px;
+  }
+  .t-gold { background: rgba(201,168,76,0.1); border: 0.5px solid rgba(201,168,76,0.3); color: #C9A84C; }
+  .t-red  { background: rgba(233,69,96,0.1); border: 0.5px solid rgba(233,69,96,0.3); color: #f87171; }
+  .t-blue { background: rgba(96,165,250,0.1); border: 0.5px solid rgba(96,165,250,0.3); color: #60a5fa; }
+  .t-pur  { background: rgba(167,139,250,0.1); border: 0.5px solid rgba(167,139,250,0.3); color: #a78bfa; }
+
+  .bar-row { display: flex; align-items: center; gap: 7px; margin-top: 8px; }
+  .bar-label { font-size: 9px; color: rgba(201,168,76,0.65); font-family: 'Barlow Condensed', sans-serif; font-weight: 600; white-space: nowrap; }
+  .bar-wrap { flex: 1; height: 2px; background: rgba(255,255,255,0.05); border-radius: 1px; }
+  .bar-fill { height: 100%; border-radius: 1px; background: linear-gradient(90deg, #3d2870, #C9A84C); }
+
+  .exp-btn {
+    font-size: 9px; color: rgba(201,168,76,0.4);
+    background: none; border: none; cursor: pointer;
+    letter-spacing: 1px; padding: 0; margin-top: 7px;
+    font-family: 'Noto Sans KR', sans-serif; font-weight: 300;
+  }
+  .exp-content {
+    display: none; margin-top: 9px; padding-top: 9px;
+    border-top: 0.5px solid rgba(255,255,255,0.05);
+    font-size: 11px; color: rgba(240,238,232,0.45);
+    line-height: 1.75; font-weight: 300;
+  }
+  .tl-item.open .exp-content { display: block; }
+  .tl-item.open .exp-btn { color: rgba(201,168,76,0.7); }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 16px 24px;
+    font-size: 9px; color: rgba(240,238,232,0.2);
+    text-align: center; line-height: 2;
+    border-top: 0.5px solid rgba(255,255,255,0.05);
+    font-weight: 300;
+  }
+
+  .tl-album-thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 7px 0 8px;
+  }
+  .tl-album-thumbs img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 0.5px solid rgba(255,255,255,0.18);
+    background: #111;
+  }
+
+
+  .tl-album-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    width:74px;
+  }
+  .tl-album-item span{
+    font-size:10px;
+    line-height:1.2;
+    text-align:center;
+    color:rgba(255,255,255,.72);
+    word-break:keep-all;
+  }
+
+</style>
+
+<div class="ig">
+
+  <!-- HERO -->
+  <div class="hero">
+    <img class="hero-bg" src="assets/img_001.png"
+      onerror="this.style.display='none'; this.parentNode.style.background='#000';"
+      alt="BTS ARIRANG 단체 사진">
+    <div class="hero-overlay"></div>
+    <div class="hero-bottom">
+      <div class="hero-name-kr">방탄소년단 · 防彈少年團</div>
+      <div class="hero-sub">2013 — 2026 · BEYOND THE SCENE</div>
+      <div class="hero-desc">소규모 기획사 7인조에서 21세기 팝 아이콘으로<br>데뷔부터 완전체 복귀까지 13년의 기록</div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">525</div><div class="stat-label">총 수상 횟수</div></div>
+    <div class="stat-item"><div class="stat-num">5회</div><div class="stat-label">빌보드 200 1위</div></div>
+    <div class="stat-item"><div class="stat-num">4회</div><div class="stat-label">빌보드 핫100 1위</div></div>
+    <div class="stat-item"><div class="stat-num">77개</div><div class="stat-label">대상 수상</div></div>
+  </div>
+
+  <!-- ALBUMS -->
+  <div class="sec-title">— 주요 앨범 —</div>
+  <div class="album-showcase">
+    <div class="album-grid" id="aGrid"></div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="sec-title">— 연도별 타임라인 —</div>
+  <div class="timeline" id="tl"></div>
+
+  <div class="footer">
+    출처 : 위키백과 · 나무위키 · BigHit Music 공식 사이트 · Billboard · 한국대중음악상 공식 자료<br>
+    앨범 이미지 출처 : Wikimedia Commons (CC BY-SA 4.0) · 헤더 이미지 : BTS ARIRANG 컴백 공식 홍보 이미지
+  </div>
+</div>
+
+<script>
+const SA = [
+  { year:'2015', name:'화양연화 pt.1', bg:'#0c1a10', tc:'#34d399', img:'assets/img_002.png' },
+  { year:'2016', name:'WINGS',         bg:'#0d0d1e', tc:'#9b7fe8', img:'assets/img_003.png' },
+  { year:'2018', name:'LY: TEAR',      bg:'#0c180c', tc:'#4ade80', img:'assets/img_004.png' },
+  { year:'2020', name:'MOTS: 7',       bg:'#180c0c', tc:'#f87171', img:'assets/img_005.png' },
+  { year:'2020', name:'Dynamite',      bg:'#fffaf8', tc:'#e94560', img:'assets/img_006.png' },
+];
+
+function ph(bg,tc,txt) {
+  return `<div class="album-art-ph" style="background:${bg};color:${tc}">${txt.replace(/\n/g,'<br>')}</div>`;
+}
+function miniPH(bg,tc,txt) {
+  return `<div class="a-mini-ph" style="background:${bg};color:${tc}">${txt.substring(0,6)}</div>`;
+}
+
+document.getElementById('aGrid').innerHTML = SA.map(a=>`
+  <div class="album-card">
+    <div class="album-art" style="background:${a.bg}">
+      ${a.img ? `<img src="${a.img}" alt="${a.name}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'album-art-ph',style:'background:${a.bg};color:${a.tc}',innerHTML:'${a.name}'}))">` : ph(a.bg,a.tc,a.name)}
+    </div>
+    <div class="album-year">${a.year}</div>
+    <div class="album-name">${a.name}</div>
+  </div>`).join('');
+
+const TL = [
+  { year:'2013', type:'debut', sc:'s-debut', st:'데뷔',
+    albums:[
+      {t:'2 COOL 4 SKOOL', img:'https://upload.wikimedia.org/wikipedia/en/5/51/BTS_2_Cool_4_Skool.jpg', bg:'#1a1a3e', tc:'#7c85ff'},
+      {t:'O!RUL8,2?', img:'', bg:'#1a1410', tc:'#fb923c'},
+    ],
+    desc:'6월 13일 빅히트 엔터테인먼트 소속 7인으로 데뷔. 힙합 아이돌 표방.',
+    wins:0,
+    tags:[{l:'국내외 신인상 수상',c:'t-blue'}],
+    detail:'데뷔 싱글 《2 COOL 4 SKOOL》, 미니 1집 《O!RUL8,2?》 연속 발매. 국내 주요 음악방송 차트에서 별다른 성과 없음. 소규모 기획사 출신으로 인지도 낮았으나 유튜브·SNS로 해외 팬덤의 씨앗 형성.'
+  },
+  { year:'2014', type:'dormant', sc:'s-off', st:'성장 중',
+    albums:[
+      {t:'SKOOL LUV AFFAIR', img:'', bg:'#1a1228', tc:'#a78bfa'},
+      {t:'DARK & WILD', img:'https://upload.wikimedia.org/wikipedia/en/a/a3/BTS_Dark_%26_Wild.jpg', bg:'#1a0e0e', tc:'#c9503a'},
+      {t:'WAKE UP (일본)', img:'', bg:'#0e1a1a', tc:'#34d399'},
+    ],
+    desc:'음방 1위 없음. 그러나 KCON LA 출연 — 해외 반응 고무적.',
+    wins:0,
+    tags:[{l:'KCON LA 출연',c:'t-blue'},{l:'해외 팬덤 확장',c:'t-blue'}],
+    detail:'정규 1집 《DARK & WILD》, 일본 정규 1집 《WAKE UP》 발매. 국내 차트 상위권 진입 실패. 그러나 유튜브 자체 콘텐츠(Bangtan Bomb)로 해외에서 팬덤 확장 중. 국내보다 해외 반응이 먼저 온 역주행의 씨앗.'
+  },
+  { year:'2015', type:'rise', sc:'s-turn', st:'전환점',
+    albums:[
+      {t:'화양연화 pt.1', img:'https://upload.wikimedia.org/wikipedia/en/5/51/The_Most_Beautiful_Moment_in_Life%2C_Part_1.jpg', bg:'#0d1a12', tc:'#34d399'},
+      {t:'화양연화 pt.2', img:'', bg:'#1a1208', tc:'#fbbf24'},
+    ],
+    desc:'\'I NEED U\'로 데뷔 후 첫 음방 1위. 화양연화 시리즈로 팬덤 폭발.',
+    wins:10,
+    tags:[{l:'첫 음방 1위',c:'t-gold'},{l:'음방 5관왕 ×2',c:'t-gold'},{l:'MTV EMA 한국 대표',c:'t-blue'}],
+    detail:'미니 3집 《화양연화 pt.1》 \'I NEED U\'로 음방 5관왕. 미니 4집 《화양연화 pt.2》 \'RUN\'으로 추가 5관왕. 청춘의 아픔을 담은 콘셉트가 국내외 폭발적 반응. MTV EMA 월드와이드 액트 한국 대표 선정.'
+  },
+  { year:'2016', type:'rise', sc:'s-rise', st:'급성장',
+    albums:[
+      {t:'화양연화 Young Forever', img:'', bg:'#1a150d', tc:'#fb923c'},
+      {t:'WINGS', img:'https://upload.wikimedia.org/wikipedia/en/6/60/BTS_Wings_album_cover.jpg', bg:'#0d0d1a', tc:'#9b7fe8'},
+      ],
+    desc:'《WINGS》로 첫 대상 수상. 초동 35만 장. \'대세돌\' 타이틀 획득.',
+    wins:15,
+    tags:[{l:'첫 대상 MMA·MAMA',c:'t-gold'},{l:'초동 35만 장',c:'t-gold'},{l:'97개국 아이튠즈 1위',c:'t-red'}],
+    detail:'정규 2집 《WINGS》 초동 35만 장 — 남자 아이돌 역대 3위. 한 달 68만 장 판매로 가온차트 역대 최고. \'피 땀 눈물\' MV K-pop 최단 1억뷰. 국내 언론이 \'대세돌\'이라 부르기 시작.'
+  },
+  { year:'2017', type:'milestone', sc:'s-peak', st:'글로벌 진출',
+    albums:[
+      {t:'YOU NEVER WALK ALONE', img:'', bg:'#0d1220', tc:'#60a5fa'},
+      {t:'LOVE YOURSELF \'Her\'', img:'https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Love_Yourself_Her_by_BTS.jpg/220px-Love_Yourself_Her_by_BTS.jpg', bg:'#1a0d18', tc:'#f0abfc'},
+    ],
+    desc:'빌보드 뮤직 어워드 한국 최초 수상. AMAs 첫 공연. DNA 전 세계 히트.',
+    wins:20,
+    tags:[{l:'BBMA Top Social Artist (한국 최초)',c:'t-red'},{l:'AMAs 최초 공연',c:'t-red'},{l:'UNICEF LOVE MYSELF 시작',c:'t-blue'},{l:'봄날 역대 최장 차트인',c:'t-gold'}],
+    detail:'리패키지 《YOU NEVER WALK ALONE》 \'봄날\' — 2026년 현재까지 멜론 역대 최장기간 차트인. 미니 5집 《LY: Her》 \'DNA\'로 핫100 7주·빌보드200 14주 차트인. AMAs·엘렌·지미 키멜쇼 출연. 영국 차트 14위 진입.'
+  },
+  { year:'2018', type:'milestone', sc:'s-peak', st:'세계 정상',
+    albums:[
+      {t:'LY: Tear', img:'https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/BTS_Love_Yourself_Tear_album_cover.jpg/220px-BTS_Love_Yourself_Tear_album_cover.jpg', bg:'#0d1a0d', tc:'#4ade80'},
+      {t:'LY: Answer', img:'', bg:'#1a0d0d', tc:'#f87171'},
+    ],
+    desc:'빌보드 200 한국 가수 최초 1위 (2연속). UN 총회 연설. 화관문화훈장.',
+    wins:25,
+    tags:[{l:'빌보드 200 연속 1위 (한국 최초)',c:'t-red'},{l:'UN 총회 연설',c:'t-red'},{l:'화관문화훈장',c:'t-gold'},{l:'월드투어 28만 석 매진',c:'t-gold'}],
+    detail:'미니 6집 《LY: Tear》 — 빌보드 200 한국 최초 1위. 리패키지 《LY: Answer》 연속 1위. UN 총회 RM 영어 연설 전 세계 주목. 화관문화훈장 수훈. 북미·유럽 스타디움 투어 28만 석 전석 매진.'
+  },
+  { year:'2019', type:'milestone', sc:'s-peak', st:'전성기',
+    albums:[
+      {t:'MAP OF SOUL: PERSONA', img:'', bg:'#1a0a0a', tc:'#fb923c'},
+    ],
+    desc:'빌보드 200 세 번째 1위. 한국 음악 시상식 대상 전부 석권.',
+    wins:30,
+    tags:[{l:'빌보드 200 3번째 1위',c:'t-red'},{l:'국내 시상식 대상 ALL SWEEP',c:'t-gold'},{l:'한국대중음악상 2연속',c:'t-gold'}],
+    detail:'미니 7집 《MAP OF THE SOUL: PERSONA》 빌보드 200 1위. 당해 MMA·MAMA·SMA·GDA 대상 전부 수상. 한국대중음악상 올해의 음악인 2년 연속. 글로벌 월드투어 전석 매진.'
+  },
+  { year:'2020', type:'milestone', sc:'s-peak', st:'역사적 기록',
+    albums:[
+      {t:'MAP OF SOUL: 7', img:'https://upload.wikimedia.org/wikipedia/en/4/45/Map_of_the_Soul_7.png', bg:'#1a0d0d', tc:'#f87171'},
+      {t:'Dynamite (싱글)', img:'', bg:'#1a1408', tc:'#fbbf24'},
+      {t:'BE', img:'https://upload.wikimedia.org/wikipedia/en/thumb/2/22/BTS_-_BE.png/220px-BTS_-_BE.png', bg:'#0d1219', tc:'#60a5fa'},
+    ],
+    desc:'Dynamite 핫100 한국 최초 1위. 음방 32관왕 역대 최다. 유튜브 연간 1위.',
+    wins:50,
+    tags:[{l:'핫100 한국 최초 1위 (Dynamite)',c:'t-red'},{l:'음방 32관왕 역대 최다',c:'t-red'},{l:'유튜브 2020 연간 최다 조회 1위',c:'t-gold'},{l:'온라인 콘서트 역대 최다 동접',c:'t-blue'}],
+    detail:'정규 4집 《MAP OF THE SOUL: 7》. 코로나로 투어 전면 취소. 그러나 영어 싱글 \'Dynamite\'로 빌보드 핫100 1위 — 한국 가수 최초. Dynamite 음방 통산 32관왕 역대 최다. 미니 《BE》 추가 발매. 유튜브 49억뷰로 연간 최다.'
+  },
+  { year:'2021', type:'milestone', sc:'s-peak', st:'시상식 정복',
+    albums:[
+      {t:'Butter / PTD (싱글)', img:'', bg:'#1a160a', tc:'#fbbf24'},
+    ],
+    desc:'그래미 한국 최초 단독 무대. AMA 올해의 아티스트. 핫100 통산 4회 1위.',
+    wins:40,
+    tags:[{l:'그래미 한국 최초 단독 무대',c:'t-red'},{l:'AMA 올해의 아티스트 (아시아 최초)',c:'t-red'},{l:'핫100 통산 4회 1위',c:'t-gold'},{l:'빌보드 200 통산 5회 1위',c:'t-gold'}],
+    detail:'\'Butter\'로 핫100 10주 연속 1위. 제63회 그래미 한국 최초 단독 무대. AMA 올해의 아티스트 아시아 최초. 미국 3대 시상식(BBMA, AMA, Grammy) 무대 전부 정복.'
+  },
+  { year:'2022', type:'turn', sc:'s-turn', st:'전환기',
+    albums:[
+      {t:'Proof', img:'https://upload.wikimedia.org/wikipedia/en/thumb/1/14/BTS_Proof_album_cover.jpg/220px-BTS_Proof_album_cover.jpg', bg:'#1a1208', tc:'#fbbf24'},
+    ],
+    desc:'앤솔러지 《Proof》로 챕터 1 마무리. 솔로 시작. 진 군 입대(12월).',
+    wins:10,
+    tags:[{l:'앤솔러지 《Proof》 발매',c:'t-gold'},{l:'부산 엑스포 유치 기원 콘서트',c:'t-blue'},{l:'진 군 입대 (12월)',c:'t-pur'}],
+    detail:'앤솔러지 앨범 《Proof》로 그룹 챕터 1 마무리. RM 《Indigo》, 진 《The Astronaut》 솔로 발매. 진이 12월 군 입대로 완전체 활동 사실상 중단.'
+  },
+  { year:'2023', type:'dormant', sc:'s-off', st:'군복무기',
+    albums:[
+      {t:'지민 《FACE》', img:'', bg:'#0d1a1a', tc:'#34d399'},
+      {t:'정국 《GOLDEN》', img:'', bg:'#1a100d', tc:'#fb923c'},
+      {t:'뷔 《Layover》', img:'', bg:'#0d0d1a', tc:'#a78bfa'},
+    ],
+    desc:'완전체 활동 없음. 멤버 솔로로 빌보드 진입 등 개별 성과.',
+    wins:0,
+    tags:[{l:'지민 《FACE》 빌보드 200 진입',c:'t-blue'},{l:'정국 《GOLDEN》 핫100 진입',c:'t-blue'},{l:'순차 입대 지속',c:'t-pur'}],
+    detail:'완전체 활동 없음. 지민 《FACE》, 뷔 《Layover》, 정국 《GOLDEN》 등 솔로 앨범이 각각 빌보드 차트 진입. 슈가 Agust D 투어 진행. 멤버 솔로 역량이 세계적으로 입증된 기간.'
+  },
+  { year:'2024', type:'dormant', sc:'s-off', st:'군복무기',
+    albums:[
+      {t:'슈가 솔로 활동', img:'', bg:'#1a1a0d', tc:'#fbbf24'},
+    ],
+    desc:'멤버 순차 전역 시작. 완전체 복귀 기대감 고조.',
+    wins:0,
+    tags:[{l:'순차 전역 시작',c:'t-pur'},{l:'2026년 컴백 예고',c:'t-pur'}],
+    detail:'멤버들 순서대로 전역 시작. 슈가 Agust D 솔로 투어 등 개인 활동 활발. 2026년 완전체 컴백을 공식 예고하며 팬덤 기대감 폭발적 상승.'
+  },
+  { year:'2025', type:'dormant', sc:'s-off', st:'복귀 준비',
+    albums:[],
+    desc:'전원 전역 완료. 7월 라이브에서 2026년 컴백 공식 선언.',
+    wins:0,
+    tags:[{l:'전원 전역 완료',c:'t-pur'},{l:'완전체 라이브 방송',c:'t-pur'},{l:'신보 녹음 확인',c:'t-gold'}],
+    detail:'마지막 멤버까지 전역 완료. 7월 완전체 라이브 방송에서 2026년 봄 컴백 및 월드투어 공식 예고. "완전히 새로운 방탄소년단"임을 예고. 글로벌 팬덤 기대감 극에 달함.'
+  },
+  { year:'2026', type:'back', sc:'s-back', st:'챕터 2 시작',
+    albums:[
+      {t:'ARIRANG', img:'', bg:'#100d1e', tc:'#c084fc'},
+    ],
+    desc:'정규 5집 《ARIRANG》 발매 (3/20). 광화문 컴백. 월드 투어 개시.',
+    wins:0,
+    tags:[{l:'정규 5집 《ARIRANG》 3월 20일',c:'t-pur'},{l:'광화문광장 컴백 무대 (3/21)',c:'t-pur'},{l:'월드 투어 개시 (4/9~)',c:'t-red'},{l:'화양연화 10주년 기념 앨범',c:'t-gold'}],
+    detail:'군백기 이후 첫 완전체 정규 앨범. 정규로는 《MAP OF THE SOUL: 7》 이후 6년 2개월 만. 광화문광장 컴백 무대 및 7년 만의 월드 투어 \'ARIRANG\' 시작. 방탄소년단 챕터 2의 서막.'
+  },
+];
+
+const MAX_W = 50;
+
+function buildMini(a) {
+  const inner = a.img
+    ? `<img src="${a.img}" alt="${a.t}" onerror="this.parentNode.innerHTML='<div class=\\'a-mini-ph\\' style=\\'background:${a.bg};color:${a.tc}\\'>${a.t.substring(0,5)}</div>'">`
+    : `<div class="a-mini-ph" style="background:${a.bg};color:${a.tc}">${a.t.substring(0,5)}</div>`;
+  return `<div class="a-chip"><div class="a-mini">${inner}</div><span>${a.t}</span></div>`;
+}
+
+const YEAR_THUMBS = {
+  '2013': [{name:'2 COOL 4 SKOOL',src:'assets/img_007.png'},{name:'O!RUL8,2?',src:'assets/img_008.png'}],
+  '2014': [{name:'SKOOL LUV AFFAIR',src:'assets/img_009.png'},{name:'SKOOL LUV AFFAIR SPECIAL',src:'assets/img_010.png'},{name:'DARK&WILD',src:'assets/img_011.png'}],
+  '2015': [{name:'화양연화 pt.1',src:'assets/img_012.png'},{name:'화양연화 pt.2',src:'assets/img_013.png'},{name:'화양연화 Young Forever',src:'assets/img_014.png'}],
+  '2016': [{name:'WINGS',src:'assets/img_015.png'},],
+  '2017': [{name:'YOU NEVER WALK ALONE',src:'assets/img_016.png'},{name:'LOVE YOURSELF HER',src:'assets/img_017.png'}],
+  '2018': [{name:'LOVE YOURSELF TEAR',src:'assets/img_018.png'},{name:'LOVE YOURSELF ANSWER',src:'assets/img_019.png'}],
+  '2019': [{name:'PERSONA',src:'assets/img_020.png'}],
+  '2020': [{name:'MAP OF THE SOUL : 7',src:'assets/img_021.png'},{name:'Dynamite',src:'assets/img_022.png'},{name:'BE',src:'assets/img_023.png'}],
+  '2021': [{name:'Butter',src:'assets/img_024.png'},{name:'Permission to Dance',src:'assets/img_025.png'}],
+  '2022': [{name:'Proof',src:'assets/img_026.png'}],
+  '2023': [{name:'Take Two',src:'assets/img_027.png'}],
+  '2026': [{name:'ARIRANG',src:'assets/img_028.png'}]
+};
+
+document.getElementById('tl').innerHTML = TL.map((d,i)=>`
+  <div class="tl-item ${d.type}" onclick="this.classList.toggle('open')">
+    <div class="tl-dot"></div>
+    <div class="tl-card">
+      <div class="yr">${d.year}</div>
+      ${YEAR_THUMBS[d.year] ? `<div class="tl-album-thumbs">${YEAR_THUMBS[d.year].map(item=>`<div class="tl-album-item"><img src="${item.src}" alt=""><span>${item.name}</span></div>`).join('')}</div>` : ''}
+      <div class="tl-status ${d.sc}">${d.st}</div>
+      ${d.albums.length ? `<div class="albums-row">${d.albums.map(buildMini).join('')}</div>` : ''}
+      <div class="tl-desc">${d.desc}</div>
+      <div class="tags">${d.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('')}</div>
+      ${d.wins > 0 ? `<div class="bar-row"><span class="bar-label">음방 1위 ${d.wins}+회</span><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(d.wins/MAX_W*100)}%"></div></div></div>` : ''}
+      <button class="exp-btn" onclick="event.stopPropagation(); this.closest('.tl-item').classList.toggle('open')">자세히 보기 ▾</button>
+      <div class="exp-content">${d.detail}</div>
+    </div>
+  </div>`).join('');
+</script>
